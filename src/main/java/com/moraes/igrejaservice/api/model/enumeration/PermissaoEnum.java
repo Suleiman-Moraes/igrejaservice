@@ -4,6 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum PermissaoEnum {
+	ROLE_PASTOR("Pastor"),
+	ROLE_ROOT("Root"),
 	ROLE_MEMBRO_COMUM("Membro Comum"),
 	ROLE_TESOUREIRO("Tesoureiro(a)");
 	
