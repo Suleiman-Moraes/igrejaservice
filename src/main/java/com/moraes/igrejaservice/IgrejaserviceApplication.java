@@ -12,7 +12,7 @@ import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 
 @SpringBootApplication(scanBasePackages = { "com.moraes.igrejaservice" })
 public class IgrejaserviceApplication extends SpringBootServletInitializer{
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(IgrejaserviceApplication.class, args);
 	}
@@ -21,7 +21,7 @@ public class IgrejaserviceApplication extends SpringBootServletInitializer{
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(IgrejaserviceApplication.class);
 	}
-
+	
 	@Bean
 	public LocaleResolver localeResolver() { 
 		return new FixedLocaleResolver(new Locale("pt", "BR"));

@@ -38,6 +38,10 @@ public class UsuarioServiceIMPL implements UsuarioService{
 		}
 	}
 	
+	public void createFirstUser() {
+		
+	}
+	
 	@Override
 	public List<String> validar(Usuario objeto) {
 		List<String> erros = new LinkedList<>();
