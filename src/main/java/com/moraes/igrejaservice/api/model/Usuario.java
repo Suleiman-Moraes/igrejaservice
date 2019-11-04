@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -48,24 +50,26 @@ public class Usuario implements Serializable {
 	
 	private String senha;
 
-	private String telefone;
-
-	private String email;
-
 	private Boolean ativo;
-
-	@Column(name = "usuario_interno")
-	private Boolean usuarioInterno;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "data_inclusao")
 	private Date dataInclusao;
+	
+	@ManyToOne
+	@JoinColumn(name = "membro_id")
+	private Membro membro;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SELECT)
 	@JoinTable(name = "usuario_permissao", joinColumns = { @JoinColumn(name = "usuario_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "permissao_id") })
 	private List<Permissao> permissoes;
+	
+	@PrePersist
+	public void prePersist() {
+		this.dataInclusao = new Date();
+	}
 
 	public int hashCode() {
 		final int prime = 31;

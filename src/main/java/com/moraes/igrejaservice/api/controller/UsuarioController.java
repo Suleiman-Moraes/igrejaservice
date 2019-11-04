@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ public class UsuarioController extends ManterControllerBeanBasic<Usuario>{
 	private UsuarioService service;
 	
 	@PostMapping
+	@PreAuthorize("hasAnyRole('ROOT')")
 	public ResponseEntity<Response<Usuario>> newObject(HttpServletRequest request, @RequestBody Usuario objeto) {
 		Response<Usuario> response = new Response<>();
 		try {
@@ -47,11 +49,12 @@ public class UsuarioController extends ManterControllerBeanBasic<Usuario>{
 	}
 	
 	@PutMapping
+	@PreAuthorize("hasAnyRole('ROOT')")
 	public ResponseEntity<Response<Usuario>> update(HttpServletRequest request, @RequestBody Usuario objeto) {
 		Response<Usuario> response = new Response<>();
 		try {
 			if(objeto.getId() == null) {
-				throw new Exception(FacesUtil.propertiesLoader().getProperty("prazoNaoExiste"));
+				throw new Exception(FacesUtil.propertiesLoader().getProperty("usuarioNaoExiste"));
 			}
 			List<String> erros = service.validar(objeto);
 			if(erros.size() > 0) {
