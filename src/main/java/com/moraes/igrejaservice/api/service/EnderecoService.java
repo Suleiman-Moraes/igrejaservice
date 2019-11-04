@@ -10,5 +10,5 @@ import com.moraes.igrejaservice.api.util.CRUDPadraoService;
 @Component
 public interface EnderecoService extends CRUDPadraoService<Endereco>{
 
-	List<String> validar(Endereco objeto);
+	List<String> validar(Endereco objeto, List<String> erros);
 }

@@ -1,6 +1,5 @@
 package com.moraes.igrejaservice.api.service.implementacao;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -12,6 +11,7 @@ import com.moraes.igrejaservice.api.model.Endereco;
 import com.moraes.igrejaservice.api.persistencia.hql.GenericDAO;
 import com.moraes.igrejaservice.api.persistencia.jpa.EnderecoDAO;
 import com.moraes.igrejaservice.api.service.EnderecoService;
+import com.moraes.igrejaservice.api.util.ValidacaoComumUtil;
 
 import lombok.Getter;
 
@@ -39,11 +39,10 @@ public class EnderecoServiceIMPL implements EnderecoService{
 	}
 	
 	@Override
-	public List<String> validar(Endereco objeto) {
-		List<String> erros = new LinkedList<>();
-//		erros = ValidacaoComumUtil.validarString(objeto.getNome(), "Nome", 'o', erros, 255);
-//		erros = ValidacaoComumUtil.validarString(objeto.getDescricao(), "Descrição", 'a', erros, 255);
-//		erros = ValidacaoComumUtil.validarNotNullAndMaiorZero(objeto.getUsuario(), "Usuario", 'o', erros);
+	public List<String> validar(Endereco objeto, List<String> erros) {
+		erros = ValidacaoComumUtil.validarString(objeto.getSetor(), "Setor", 'o', erros, 255);
+		erros = ValidacaoComumUtil.validarString(objeto.getCidade(), "Cidade", 'a', erros, 255);
+		erros = ValidacaoComumUtil.validarNotNull(objeto.getUf(), "Uf", 'a', erros);
 		return erros;
 	}
 	
