@@ -18,8 +18,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.moraes.igrejaservice.api.model.dto.MembroDto;
 import com.moraes.igrejaservice.api.model.enumeration.SituacaoMembroEnum;
 import com.moraes.igrejaservice.api.model.enumeration.TipoMembroEnum;
+import com.moraes.igrejaservice.api.model.interfaces.IMembro;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +37,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "membro")
-public class Membro implements Serializable {
+public class Membro implements Serializable, IMembro {
 
 	private static final long serialVersionUID = 1L;
 
@@ -71,9 +73,24 @@ public class Membro implements Serializable {
 	@JoinColumn(name = "endereco_id")
 	private Endereco endereco;
 	
+	public Membro(MembroDto obj) {
+		this.id = obj.getId();
+		this.nome = obj.getNome();
+		this.cpf = obj.getCpf();
+		this.telefone = obj.getTelefone();
+		this.email = obj.getEmail();
+		this.sexo = obj.getSexo();
+		this.situacao = obj.getSituacao();
+		this.tipo = obj.getTipo();
+		this.dataNascimento = obj.getDataNascimento();
+		this.dataInclusao = obj.getDataInclusao();
+		this.endereco = obj.getEndereco();
+	}
+	
 	@PrePersist
 	public void prePersist() {
 		this.dataInclusao = new Date();
+		this.situacao = this.situacao != null ? this.situacao : SituacaoMembroEnum.ATIVO;
 	}
 
 	public int hashCode() {

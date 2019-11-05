@@ -9,9 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.moraes.igrejaservice.api.model.Membro;
+import com.moraes.igrejaservice.api.model.dto.MembroDto;
+import com.moraes.igrejaservice.api.model.interfaces.IMembro;
 import com.moraes.igrejaservice.api.persistencia.hql.GenericDAO;
 import com.moraes.igrejaservice.api.persistencia.jpa.MembroDAO;
+import com.moraes.igrejaservice.api.service.EnderecoService;
 import com.moraes.igrejaservice.api.service.MembroService;
+import com.moraes.igrejaservice.api.util.ValidacaoComumUtil;
 
 import lombok.Getter;
 
@@ -27,6 +31,9 @@ public class MembroServiceIMPL implements MembroService{
 	@Autowired
 	private GenericDAO genericDAO;
 	
+	@Autowired
+	private EnderecoService enderecoService;
+	
 	@Override
 	public Membro findByField(String field, Object value) {
 		try {
@@ -39,11 +46,28 @@ public class MembroServiceIMPL implements MembroService{
 	}
 	
 	@Override
-	public List<String> validar(Membro objeto) {
+	public MembroDto save(MembroDto objeto) {
+		try {
+			return new MembroDto(save(new Membro(objeto)));
+		} catch (Exception e) {
+			logger.warn("findByField " + e.getMessage());
+			return null;
+		}
+	}
+	
+	@Override
+	public List<String> validar(IMembro objeto) {
 		List<String> erros = new LinkedList<>();
-//		erros = ValidacaoComumUtil.validarString(objeto.getNome(), "Nome", 'o', erros, 255);
-//		erros = ValidacaoComumUtil.validarString(objeto.getDescricao(), "Descrição", 'a', erros, 255);
-//		erros = ValidacaoComumUtil.validarNotNullAndMaiorZero(objeto.getUsuario(), "Usuario", 'o', erros);
+		erros = ValidacaoComumUtil.validarString(objeto.getNome(), "Nome", 'o', erros, 255);
+		erros = ValidacaoComumUtil.validarString(objeto.getCpf(), "CPF", erros, 255);
+		erros = ValidacaoComumUtil.validarString(objeto.getTelefone(), "Telefone", erros, 255);
+		erros = ValidacaoComumUtil.validarString(objeto.getEmail(), "E-mail", erros, 255);
+		erros = ValidacaoComumUtil.validarNotNull(objeto.getSexo(), "Sexo", 'o', erros);
+		erros = ValidacaoComumUtil.validarNotNull(objeto.getTipo(), "Tipo do Membro", 'o', erros);
+		erros = ValidacaoComumUtil.validarNotNull(objeto.getEndereco(), "Endereço", 'o', erros);
+		if(objeto.getEndereco() != null) {
+			erros = enderecoService.validar(objeto.getEndereco(), erros);
+		}
 		return erros;
 	}
 	

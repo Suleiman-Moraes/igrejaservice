@@ -40,6 +40,11 @@ public class EnderecoServiceIMPL implements EnderecoService{
 	
 	@Override
 	public List<String> validar(Endereco objeto, List<String> erros) {
+		erros = ValidacaoComumUtil.validarString(objeto.getSetor(), "Rua", erros, 255);
+		erros = ValidacaoComumUtil.validarString(objeto.getSetor(), "Quadra", erros, 255);
+		erros = ValidacaoComumUtil.validarString(objeto.getSetor(), "Lote", erros, 255);
+		erros = ValidacaoComumUtil.validarString(objeto.getSetor(), "Número", erros, 10);
+		erros = ValidacaoComumUtil.validarString(objeto.getSetor(), "cep", erros, 9);
 		erros = ValidacaoComumUtil.validarString(objeto.getSetor(), "Setor", 'o', erros, 255);
 		erros = ValidacaoComumUtil.validarString(objeto.getCidade(), "Cidade", 'a', erros, 255);
 		erros = ValidacaoComumUtil.validarNotNull(objeto.getUf(), "Uf", 'a', erros);
