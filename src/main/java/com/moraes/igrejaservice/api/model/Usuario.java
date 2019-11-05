@@ -66,6 +66,18 @@ public class Usuario implements Serializable {
 			@JoinColumn(name = "permissao_id") })
 	private List<Permissao> permissoes;
 	
+	public Usuario(Membro membro) {
+		this.nome = membro.getNome();
+		this.senha = membro.getNome();
+		this.ativo = Boolean.TRUE;
+		this.membro = membro;
+	}
+	
+	public Usuario setLogin(String login) {
+		this.login = login;
+		return this;
+	}
+	
 	@PrePersist
 	public void prePersist() {
 		this.dataInclusao = new Date();

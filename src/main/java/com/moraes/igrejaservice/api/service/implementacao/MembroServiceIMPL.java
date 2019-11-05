@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.moraes.igrejaservice.api.model.Membro;
@@ -15,6 +16,8 @@ import com.moraes.igrejaservice.api.persistencia.hql.GenericDAO;
 import com.moraes.igrejaservice.api.persistencia.jpa.MembroDAO;
 import com.moraes.igrejaservice.api.service.EnderecoService;
 import com.moraes.igrejaservice.api.service.MembroService;
+import com.moraes.igrejaservice.api.service.UsuarioService;
+import com.moraes.igrejaservice.api.util.FacesUtil;
 import com.moraes.igrejaservice.api.util.ValidacaoComumUtil;
 
 import lombok.Getter;
@@ -30,6 +33,9 @@ public class MembroServiceIMPL implements MembroService{
 	
 	@Autowired
 	private GenericDAO genericDAO;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@Autowired
 	private EnderecoService enderecoService;
@@ -56,6 +62,21 @@ public class MembroServiceIMPL implements MembroService{
 	}
 	
 	@Override
+	public Membro save(Membro objeto) throws Exception {
+		try {
+			objeto = persistencia.save(objeto);
+			posSave(objeto);
+			return objeto;
+		} catch (DataIntegrityViolationException e) {
+			logger.error("save " + e.getMessage());
+			throw new Exception(FacesUtil.propertiesLoader().getProperty("dadosInvalidos"));
+		} catch (Exception e) {
+			logger.error("save " + e.getMessage());
+			throw e;
+		}
+	}
+	
+	@Override
 	public List<String> validar(IMembro objeto) {
 		List<String> erros = new LinkedList<>();
 		erros = ValidacaoComumUtil.validarString(objeto.getNome(), "Nome", 'o', erros, 255);
@@ -69,6 +90,16 @@ public class MembroServiceIMPL implements MembroService{
 			erros = enderecoService.validar(objeto.getEndereco(), erros);
 		}
 		return erros;
+	}
+	
+	private void posSave(Membro objeto) {
+		try {
+			new Thread(() -> {
+				usuarioService.saveNewUserByMembro(objeto);
+			}).run();
+		} catch (Exception e) {
+			logger.warn("posSave " + e.getMessage());
+		}
 	}
 	
 	@Override
