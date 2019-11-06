@@ -7,14 +7,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.moraes.igrejaservice.api.model.Membro;
 import com.moraes.igrejaservice.api.model.Usuario;
 import com.moraes.igrejaservice.api.persistencia.hql.GenericDAO;
 import com.moraes.igrejaservice.api.persistencia.jpa.UsuarioDAO;
+import com.moraes.igrejaservice.api.service.PermissaoService;
 import com.moraes.igrejaservice.api.service.UsuarioService;
 import com.moraes.igrejaservice.api.util.FacesUtil;
+import com.moraes.igrejaservice.api.util.StringUtil;
 
 import lombok.Getter;
 
@@ -29,6 +32,12 @@ public class UsuarioServiceIMPL implements UsuarioService{
 	
 	@Autowired
 	private GenericDAO genericDAO;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private PermissaoService permissaoService;
 	
 	@Override
 	public Usuario findByField(String field, Object value) {
@@ -47,6 +56,9 @@ public class UsuarioServiceIMPL implements UsuarioService{
 			final List<Usuario> users = persistencia.findByLoginAndIdNot(objeto.getLogin(), objeto.getId() == null ? 0l : objeto.getId());
 			if(users != null && !users.isEmpty()) {
 				throw new Exception(FacesUtil.propertiesLoader().getProperty("usuarioLoginEmUso"));
+			}
+			if(StringUtil.isNotNullOrEmpity(objeto.getSenha()) && objeto.getSenha().length() <= 50) {
+				objeto.setSenha(passwordEncoder.encode(objeto.getSenha()));
 			}
 			objeto = persistencia.save(objeto);
 			return objeto;
@@ -82,7 +94,8 @@ public class UsuarioServiceIMPL implements UsuarioService{
 					login += nome[i].charAt(0);
 				}
 			}
-			return new Usuario(objeto).setLogin(login.toLowerCase());
+			return save(new Usuario(objeto).setLogin(login.toLowerCase()).
+					setPermissoes(permissaoService.getPermissoesByTipoMembro(objeto.getTipo())));
 		} catch (Exception e) {
 			logger.warn("saveNewUserByMembro " + e.getMessage());
 		}

@@ -4,8 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum TipoMembroEnum {
-	ATIVO("Ativo"),
-	INATIVO("Inativo");
+	MEMBRO("Membro"),
+	PASTOR_DIRIGENTE("Pastor(a) Dirigente"),
+	TESOUREIRO("Tesoureir(a)");
 	
 	private String descricao;
 	
@@ -14,7 +15,7 @@ public enum TipoMembroEnum {
 	}
 	
 	public static TipoMembroEnum get(String status) {
-		TipoMembroEnum retorno = TipoMembroEnum.valueOf(status != null ? status.trim().toUpperCase() : "ATIVO");
-		return retorno != null ? retorno : TipoMembroEnum.ATIVO;
+		TipoMembroEnum retorno = TipoMembroEnum.valueOf(status != null ? status.trim().toUpperCase() : "MEMBRO");
+		return retorno != null ? retorno : TipoMembroEnum.MEMBRO;
 	}
 }

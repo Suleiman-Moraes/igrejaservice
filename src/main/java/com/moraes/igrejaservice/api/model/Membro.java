@@ -62,7 +62,7 @@ public class Membro implements Serializable, IMembro {
 	private TipoMembroEnum tipo;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "data_inclusao")
+	@Column(name = "data_nascimento")
 	private Date dataNascimento;
 	
 	@Temporal(TemporalType.TIMESTAMP)

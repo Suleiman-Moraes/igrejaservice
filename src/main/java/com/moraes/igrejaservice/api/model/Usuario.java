@@ -78,6 +78,11 @@ public class Usuario implements Serializable {
 		return this;
 	}
 	
+	public Usuario setPermissoes(List<Permissao> permissoes) {
+		this.permissoes = permissoes;
+		return this;
+	}
+	
 	@PrePersist
 	public void prePersist() {
 		this.dataInclusao = new Date();
