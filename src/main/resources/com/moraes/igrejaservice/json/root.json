@@ -1,0 +1,27 @@
+{
+    "id": null,
+    "login": "root",
+    "nome": "Root",
+    "senha": "$2a$10$P9A0eKYU0.L9sNHcnLsgD.KR2HrU7M2qtkiR1dpr4ZhHwuTBkj39O",
+    "ativo": true,
+    "dataInclusao": "2019-11-06T00:46:19.882+0000",
+    "membro": null,
+    "permissoes": [
+      {
+        "id": 1,
+        "nome": "ROLE_MEMBRO"
+      },
+      {
+        "id": 2,
+        "nome": "ROLE_PASTOR"
+      },
+      {
+        "id": 3,
+        "nome": "ROLE_TESOUREIRO"
+      },
+      {
+        "id": 4,
+        "nome": "ROLE_ROOT"
+      }
+    ]
+  }
