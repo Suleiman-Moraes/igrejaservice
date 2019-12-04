@@ -38,7 +38,7 @@ CREATE TABLE membro
   id bigserial NOT NULL,
   nome character varying(255) NOT NULL,
   cpf character varying(14),
-  telefone character varying(11),
+  telefone character varying(14),
   email character varying(255),
   sexo boolean NOT NULL DEFAULT false,
   tipo character varying(255) NOT NULL,

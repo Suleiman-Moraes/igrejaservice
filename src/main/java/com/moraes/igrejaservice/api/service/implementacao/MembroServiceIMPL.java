@@ -81,7 +81,7 @@ public class MembroServiceIMPL implements MembroService{
 		List<String> erros = new LinkedList<>();
 		erros = ValidacaoComumUtil.validarString(objeto.getNome(), "Nome", 'o', erros, 255);
 		erros = ValidacaoComumUtil.validarString(objeto.getCpf(), "CPF", erros, 14);
-		erros = ValidacaoComumUtil.validarString(objeto.getTelefone(), "Telefone", erros, 11);
+		erros = ValidacaoComumUtil.validarString(objeto.getTelefone(), "Telefone", erros, 14);
 		erros = ValidacaoComumUtil.validarString(objeto.getEmail(), "E-mail", erros, 255);
 		erros = ValidacaoComumUtil.validarNotNull(objeto.getSexo(), "Sexo", 'o', erros);
 		erros = ValidacaoComumUtil.validarNotNull(objeto.getTipo(), "Tipo do Membro", 'o', erros);
