@@ -17,7 +17,7 @@ public class CurrentUser {
 	
 	public CurrentUser(String token, Usuario user) {
 		roles = new TreeSet<>();
-		user.getPermissoes().forEach(per -> roles.add(per.toString()));
+		user.getPermissoes().forEach(per -> roles.add(per.getNome().toString()));
 		this.token = token;
 		this.user = user;
 	}
