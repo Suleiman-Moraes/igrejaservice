@@ -51,7 +51,7 @@ public class FacesUtil {
 	public static Properties properties(String name) {
 		Properties prop = new Properties();
 		try {
-			String caminho = Message.class.getResource("").getPath() + name;
+			String caminho = Message.class.getResource("").getPath().replaceAll("src/main/java", "src/main/resources") + name;
 			File file = new File(caminho);
 			FileInputStream fileInputStream = new FileInputStream(file);
 			prop.load(fileInputStream);
