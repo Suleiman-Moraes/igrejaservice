@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.moraes.igrejaservice.api.model.dto.MembroDto;
 import com.moraes.igrejaservice.api.model.enumeration.SituacaoMembroEnum;
 import com.moraes.igrejaservice.api.model.enumeration.TipoMembroEnum;
@@ -61,6 +62,7 @@ public class Membro implements Serializable, IMembro {
 	@Enumerated(EnumType.STRING)
 	private TipoMembroEnum tipo;
 	
+	@JsonFormat(timezone="America/Sao_Paulo")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "data_nascimento")
 	private Date dataNascimento;

@@ -1,5 +1,6 @@
 package com.moraes.igrejaservice.api.service.implementacao;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,6 +65,12 @@ public class MembroServiceIMPL implements MembroService{
 	@Override
 	public Membro save(Membro objeto) throws Exception {
 		try {
+			if(objeto.getDataNascimento() != null) {
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(objeto.getDataNascimento());
+				calendar.set(Calendar.HOUR_OF_DAY, 12);
+				objeto.setDataNascimento(calendar.getTime());
+			}
 			objeto = persistencia.save(objeto);
 			posSave(objeto);
 			return objeto;
