@@ -49,7 +49,6 @@ public class UsuarioController extends ManterControllerBeanBasic<Usuario>{
 	}
 	
 	@PutMapping
-	@PreAuthorize("hasAnyRole('ROOT')")
 	public ResponseEntity<Response<Usuario>> update(HttpServletRequest request, @RequestBody Usuario objeto) {
 		Response<Usuario> response = new Response<>();
 		try {
@@ -61,7 +60,7 @@ public class UsuarioController extends ManterControllerBeanBasic<Usuario>{
 				response.setErros(erros);
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 			}
-			response.setData(service.save(objeto));
+			response.setData(service.save(objeto, request.getHeader("Authorization")));
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			return RestControllerUtil.mostrarErroPadraoObject(this.getClass(), response, e.getMessage());

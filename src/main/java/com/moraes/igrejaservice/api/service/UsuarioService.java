@@ -14,4 +14,8 @@ public interface UsuarioService extends CRUDPadraoService<Usuario>{
 	List<String> validar(Usuario objeto);
 
 	Usuario saveNewUserByMembro(Membro objeto);
+
+	Usuario findByToken(String token);
+
+	Usuario save(Usuario objeto, String token) throws Exception;
 }

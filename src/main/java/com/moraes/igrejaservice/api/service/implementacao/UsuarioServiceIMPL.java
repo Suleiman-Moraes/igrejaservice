@@ -14,6 +14,7 @@ import com.moraes.igrejaservice.api.model.Membro;
 import com.moraes.igrejaservice.api.model.Usuario;
 import com.moraes.igrejaservice.api.persistencia.hql.GenericDAO;
 import com.moraes.igrejaservice.api.persistencia.jpa.UsuarioDAO;
+import com.moraes.igrejaservice.api.security.jwt.JwtTokenUtil;
 import com.moraes.igrejaservice.api.service.PermissaoService;
 import com.moraes.igrejaservice.api.service.UsuarioService;
 import com.moraes.igrejaservice.api.util.FacesUtil;
@@ -37,6 +38,9 @@ public class UsuarioServiceIMPL implements UsuarioService{
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+	
+	@Autowired
 	private PermissaoService permissaoService;
 	
 	@Override
@@ -47,6 +51,17 @@ public class UsuarioServiceIMPL implements UsuarioService{
 		} catch (Exception e) {
 			logger.warn("findByField " + e.getMessage());
 			return null;
+		}
+	}
+	
+	@Override
+	public Usuario save(Usuario objeto, String token) throws Exception {
+		Usuario usuario = findByToken(token);
+		if(!objeto.getMembro().getId().equals(usuario.getMembro().getId())) {
+			throw new Exception(FacesUtil.propertiesLoader().getProperty("usuarioNotPermissao"));
+		}
+		else {
+			return save(objeto);
 		}
 	}
 	
@@ -68,6 +83,17 @@ public class UsuarioServiceIMPL implements UsuarioService{
 		} catch (Exception e) {
 			logger.error("save " + e.getMessage());
 			throw e;
+		}
+	}
+	
+	@Override
+	public Usuario findByToken(String token) {
+		try {
+			final String login = jwtTokenUtil.getUsernameFromToken(token);
+			return findByField("login", login);
+		} catch (Exception e) {
+			logger.error("findByToken " + e.getMessage());
+			return null;
 		}
 	}
 	
