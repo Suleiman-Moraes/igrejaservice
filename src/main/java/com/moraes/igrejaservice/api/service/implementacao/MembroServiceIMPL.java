@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.moraes.igrejaservice.api.model.Membro;
+import com.moraes.igrejaservice.api.model.Usuario;
 import com.moraes.igrejaservice.api.model.dto.MembroDto;
 import com.moraes.igrejaservice.api.model.interfaces.IMembro;
 import com.moraes.igrejaservice.api.persistencia.hql.GenericDAO;
@@ -60,6 +61,15 @@ public class MembroServiceIMPL implements MembroService{
 			logger.warn("findByField " + e.getMessage());
 			return null;
 		}
+	}
+	
+	@Override
+	public Membro save(Membro objeto, String token) throws Exception {
+		Usuario usuario = usuarioService.findByToken(token);
+		if(!objeto.getId().equals(usuario.getMembro().getId())) {
+			return objeto;
+		}
+		return save(objeto);
 	}
 	
 	@Override

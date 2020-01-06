@@ -15,4 +15,6 @@ public interface MembroService extends CRUDPadraoService<Membro>{
 	List<String> validar(IMembro objeto);
 
 	MembroDto save(MembroDto objeto);
+
+	Membro save(Membro objeto, String token) throws Exception;
 }

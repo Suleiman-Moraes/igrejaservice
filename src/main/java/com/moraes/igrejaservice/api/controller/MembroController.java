@@ -49,7 +49,6 @@ public class MembroController extends ManterControllerBeanBasic<Membro>{
 	}
 	
 	@PutMapping
-	@PreAuthorize("hasAnyRole('PASTOR')")
 	public ResponseEntity<Response<Membro>> update(HttpServletRequest request, @RequestBody Membro objeto) {
 		Response<Membro> response = new Response<>();
 		try {
@@ -61,7 +60,7 @@ public class MembroController extends ManterControllerBeanBasic<Membro>{
 				response.setErros(erros);
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 			}
-			response.setData(service.save(objeto));
+			response.setData(service.save(objeto, request.getHeader("Authorization")));
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
 			return RestControllerUtil.mostrarErroPadraoObject(this.getClass(), response, e.getMessage());
